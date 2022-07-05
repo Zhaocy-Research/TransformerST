@@ -11,7 +11,7 @@ The code is licensed under the MIT license.
 
 1. Requirements
 
-3.1 Operating systems:
+1.1 Operating systems:
 
 The code in python has been tested on Linux (Ubuntu 20.04.1 LTS).  
 
