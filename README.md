@@ -107,20 +107,13 @@ The defination of each argument in IDC_super_TransformerST.py is listed below.
 '--eval_resolution', type=int, default=1, help='Eval cluster number.'  
 '--eval_graph_n', type=int, default=20, help='Eval graph kN tol.'  
 
-**4. All datasets used in TransformerST:**
+**4. MOre datasets used in TransformerST:**
 
 (1) LIBD human dorsolateral pre-frontal cortex data (DLPFC) (http://research.libd.org/spatialLIBD/); 
 
 (2) Melanoma ST data (https://www.spatialresearch.org/wp-content/uploads/
 2019/03/ST-Melanoma-Datasets 1.zip); 
 
-(3) Human epidermal growth factor
-receptor(HER) 2 amplified (HER+) invasive ductal carcinoma (IDC) sample;
-
-Zhao, E. et al. Spatial transcriptomics at subspot resolution with bayesspace. Nature Biotechnology 1–10 (2021).
-
-(4)HER2+ breast cancer data;
+(3)HER2+ breast cancer data;
 
 He, B. et al. Integrating spatial gene expression and breast tumour morphology via deep learning. Nature biomedical engineering 4 (8), 827–834 (2020) 
-
-(5) Mouse lung data available upon reasonable request.
