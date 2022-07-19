@@ -20,8 +20,7 @@ The code in python has been tested on Linux (Ubuntu 20.04.1 LTS).
 anndata==0.7.6   
 numpy==1.20.2  
 opencv-python==4.5.3.56  
-pandas==1.2.4  
-python==3.9.4  
+pandas==1.2.4   
 python-louvain==0.15  
 rpy2==3.4.5  
 scanpy==1.7.2  
