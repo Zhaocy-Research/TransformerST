@@ -5,7 +5,7 @@ We develop a novel Transformer based framework (TransformerST) for associating t
 
 Framework
 
-image
+[image](https://github.com/Zhaocy-Research/TransformerST/blob/main/framework-1.pdf)
 
 The code is licensed under the MIT license.
 
