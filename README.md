@@ -17,20 +17,20 @@ The code in python has been tested on Linux (Ubuntu 20.04.1 LTS).
 
 **1.2 Required packages in python:**
 
-anndata==0.7.6   
-numpy==1.20.2  
-opencv-python==4.5.3.56  
-pandas==1.2.4   
-python-louvain==0.15  
-rpy2==3.4.5  
-scanpy==1.7.2  
-scipy==1.6.3  
-seaborn==0.11.1  
-torch==1.8.1  
-torch-geometric==1.7.0  
-torchvision==0.9.1  
-tqdm==4.59.0  
-umap-learn==0.5.1  
+anndata   
+numpy
+opencv-python 
+pandas  
+python-louvain 
+rpy2
+scanpy 
+scipy 
+seaborn  
+torch 
+torch-geometric  
+torchvision  
+tqdm  
+umap-learn  
 
 **2. Instructions: Demo on mouse lung data.**   
  
