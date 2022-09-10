@@ -71,7 +71,7 @@ data_root = './data/Lung'
 proj_list = ['A1']
 # proj_list = ['151507']
 # set saving result path
-save_root = './output/Lung_adaptive111/'
+save_root = './output/Lung_adaptive/'
 
 
 def res_search_fixed_clus(adata, fixed_clus_count, increment=0.02):
@@ -164,7 +164,7 @@ for proj_idx in range(len(proj_list)):
     params.use_feature = 1
     graph_dict_prue, data1_prue = graph_construction(X, adata_h5.shape[0],
                                            adata.obs['expression_louvain_label'], params)
-    params.save_path = mk_dir(f'{save_root}/{data_name}/SEDR_adaptive')
+    params.save_path = mk_dir(f'{save_root}/{data_name}/TransformerST_adaptive')
 
     params.cell_num = adata_h5.shape[0]
     print('==== Graph Construction Finished')
@@ -184,7 +184,6 @@ for proj_idx in range(len(proj_list)):
     adata_h5.var_names_make_unique()
     adata_TransformerST.uns['spatial'] = adata_h5.uns['spatial']
     adata_TransformerST.obsm['spatial'] = adata_h5.obsm['spatial']
-    # print(adata_sedr.obsm['spatial'],"wwwwwwwwww")
     sc.pp.neighbors(adata_TransformerST, n_neighbors=params.eval_graph_n)
     sc.tl.umap(adata_TransformerST)
     n_clusters = 5
