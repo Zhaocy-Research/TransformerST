@@ -18,16 +18,16 @@ The code in python has been tested on Linux (Ubuntu 20.04.1 LTS).
 **1.2 Required packages in python:**
 
 anndata   
-numpy
-opencv-python 
+numpy  
+opencv-python   
 pandas  
-python-louvain 
-rpy2
-scanpy 
-scipy 
-seaborn  
-torch 
-torch-geometric  
+python-louvain  
+rpy2  
+scanpy  
+scipy  
+seaborn   
+torch  
+torch-geometric    
 torchvision  
 tqdm  
 umap-learn  
