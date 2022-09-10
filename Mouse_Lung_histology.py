@@ -186,7 +186,7 @@ for proj_idx in range(len(proj_list)):
     adata_TransformerST.obsm['spatial'] = adata_h5.obsm['spatial']
     sc.pp.neighbors(adata_TransformerST, n_neighbors=params.eval_graph_n)
     sc.tl.umap(adata_TransformerST)
-    n_clusters = 5
+    n_clusters = 4
     eval_resolution = res_search_fixed_clus(adata_TransformerST, n_clusters)
     # print(eval_resolution)
     sc.tl.leiden(adata_TransformerST, key_added="TransformerST_leiden", resolution=eval_resolution)
