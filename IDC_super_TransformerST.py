@@ -24,11 +24,12 @@ from src.calculate_dis import *
 from anndata import AnnData
 from rpy2.robjects.packages import importr
 from rpy2.robjects import r
-# from scipy.io import savemat
+from scipy.io import savemat
 # import rpy2.robjects as robjects
 from rpy2.robjects import pandas2ri
 import rpy2.robjects as ro
 from sklearn.cluster import KMeans
+from src.submodules import GCNBlock_TransformerST,Graph_TransformerST
 importr('mclust')
 pandas2ri.activate()
 import tifffile
@@ -47,7 +48,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--k', type=int, default=10, help='parameter k in spatial graph')
 parser.add_argument('--knn_distanceType', type=str, default='euclidean',
                     help='graph distance type: euclidean/cosine/correlation')
-parser.add_argument('--epochs', type=int, default=2000, help='Number of epochs to train.')
+parser.add_argument('--epochs', type=int, default=20, help='Number of epochs to train.')
 parser.add_argument('--cell_feat_dim', type=int, default=3000, help='Dim of input genes')
 parser.add_argument('--feat_hidden1', type=int, default=512, help='Dim of DNN hidden 1-layer.')
 parser.add_argument('--feat_hidden2', type=int, default=128, help='Dim of DNN hidden 2-layer.')
@@ -67,7 +68,8 @@ parser.add_argument('--dec_tol', type=float, default=0.00, help='DEC tol.')
 # ______________ Eval clustering Setting ______________
 parser.add_argument('--eval_resolution', type=int, default=1, help='Eval cluster number.')
 parser.add_argument('--eval_graph_n', type=int, default=20, help='Eval graph kN tol.')
-
+gcn_k_net = Graph_TransformerST()
+weight_super_net = GCNBlock_TransformerST()
 params = parser.parse_args()
 params.device = device
 
@@ -125,9 +127,36 @@ for proj_idx in range(len(proj_list)):
 
     pre_resolution=0.25
     sc.tl.leiden(adata, resolution=pre_resolution, key_added='expression_louvain_label')
+    params.use_feature = 0
+    graph_dict, data1 = graph_construction(adata_h5.obsm['spatial'], adata_h5.shape[0],
+                                           adata.obs['expression_louvain_label'], params)
+    params.use_feature = 1
+    graph_dict_prue, data1_prue = graph_construction(adata_h5.obsm['spatial'], adata_h5.shape[0],
+                                                     adata.obs['expression_louvain_label'], params)
+    params.save_path = mk_dir(f'{save_root}/SEDR')
 
-    adata_TransformerST_super = super11(img=im, raw=adata,raw_feature=adata_X,
-                                    genes=adata.var.index.tolist(), shape="None", s=1, k=2, num_nbs=1)
+    params.cell_num = adata_h5.shape[0]
+    print('==== Graph Construction Finished')
+    # ################## Model training
+    TransformerST_net = TransformerST_Train(adata_X, graph_dict, data1, graph_dict_prue, data1_prue, adata_h5.obsm['spatial'], params)
+    if params.using_dec:
+        TransformerST_net.train_with_dec()
+    else:
+        TransformerST_net.train_without_dec()
+    TransformerST_feat, _, _ = TransformerST_net.process()
+    adata_st = anndata.AnnData(TransformerST_feat)
+    adata_st.uns['spatial'] = adata_h5.uns['spatial']
+    adata_st.obsm['spatial'] = adata_h5.obsm['spatial']
+    # print(adata_st)
+    num=5
+    super_adata,dis= gcn_k_net(TransformerST_feat,im,adata,adata.var.index.tolist(), num)
+    # print(super_adata)
+
+    adata_TransformerST_super = weight_super_net(adata, super_adata,dis,num)
+    # print(adata_TransformerST_super)
+    # adata_TransformerST_super = super11(img=im, raw=adata, raw_feature=adata_X,genes=adata.var.index.tolist(), num=1)
+    # adata_TransformerST_super = super11(img=im, raw=adata,raw_feature=adata_X,
+    #                                 genes=adata.var.index.tolist(), shape="None", s=1, k=2, num_nbs=1)
     adata_TransformerST_super.obsm['spatial'] = adata_TransformerST_super.obs[['x', 'y']].to_numpy()
     n_clusters = 10
     adata_TransformerST_super = comp_tsne_km(adata_TransformerST_super, n_clusters)
