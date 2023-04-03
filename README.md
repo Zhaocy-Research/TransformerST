@@ -38,7 +38,8 @@ umap-learn
 
 Raw data should be placed in the folder data.
 
-we take the mouse lung data for example, which is in data/Lung/A1. 
+we take the mouse lung data for example, which is in data/Lung/A1. Please use the link to get the mouse lung data
+https://drive.google.com/drive/folders/1anVCPRrPIB2jV6DTn6UGJL5X0pErdUqg?usp=share_link
 
 
 **2.2 Cell type identification at spot resolution with Mouse Lung data**
