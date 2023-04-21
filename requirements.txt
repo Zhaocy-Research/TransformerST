@@ -1,0 +1,14 @@
+anndata
+numpy
+opencv-python
+pandas
+python-louvain
+rpy2
+scanpy
+scipy
+seaborn
+torch
+torch-geometric
+torchvision
+tqdm
+umap-learn
