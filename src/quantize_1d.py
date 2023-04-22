@@ -5,7 +5,7 @@ import torch.nn as nn
 class VectorQuantizer(nn.Module):
     ""
     ____________________________________________
-    Discretization bottleneck part of the VQ-VAE.
+    Discretization bottleneck.
     Inputs:
     - n_e : number of embeddings
     - e_dim : dimension of embedding
