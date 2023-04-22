@@ -52,7 +52,7 @@ https://drive.google.com/drive/folders/1anVCPRrPIB2jV6DTn6UGJL5X0pErdUqg?usp=sha
 
 The TransformerST model is implemented in Mouse_Lung_histology.py. When running TransformerST, the data path should be specified, please modify the --data_root  and --proj_list here. In addition, the parameter --save_root should also be modified to save the experimental results.
 
-The defination of each argument in Mouse_Lung_histology.py is listed below.
+The defination of each argument in Mouse_Lung_histology.py is listed below. The parameters are chosen based on the experiments.
 
 '--k', type=int, default=20, help='parameter k in spatial graph'  
 '--knn_distanceType', type=str, default='euclidean',help='graph distance type: euclidean/cosine/correlation'  
@@ -89,7 +89,7 @@ we take the IDC data for example, which is in data/IDC.
 
 The TransformerST model is implemented in IDC_super_TransformerST.py. When running TransformerST, the data path should be specified, please modify the --data_root  and --proj_list here. In addition, the parameter --save_root should also be modified to save the experimental results.
 
-The defination of each argument in IDC_super_TransformerST.py is listed below.
+The defination of each argument in IDC_super_TransformerST.py is listed below. The parameters are chosen based on the experiments.
 
 '--k', type=int, default=10, help='parameter k in spatial graph'  
 '--knn_distanceType', type=str, default='euclidean', help='graph distance type: euclidean/cosine/correlation'  
