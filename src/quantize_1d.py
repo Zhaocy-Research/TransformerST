@@ -3,8 +3,7 @@ import torch.nn as nn
 
 
 class VectorQuantizer(nn.Module):
-    """
-    see https://github.com/MishaLaskin/vqvae/blob/d761a999e2267766400dc646d82d3ac3657771d4/models/quantizer.py
+    ""
     ____________________________________________
     Discretization bottleneck part of the VQ-VAE.
     Inputs:
