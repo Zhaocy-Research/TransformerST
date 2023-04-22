@@ -19,6 +19,7 @@ from torch.distributions import Normal, Independent
 from src.decoder import BasisODEDecoder,BasisDecoder
 from torch.nn.functional import softplus
 from src.submodules import *
+from src.quantize_1d import VectorQuantizer
 import torch_geometric as pyg
 # from scETM.logging_utils import log_arguments
 # from src.BaseCellModel import BaseCellModel
@@ -1183,16 +1184,16 @@ class ST_Transformer_adaptive(nn.Module):
     def __init__(self, input_dim, params):
         super(ST_Transformer_adaptive, self).__init__()
         self.alpha = 1.0
-        self.latent_dim = params.gcn_hidden2+params.feat_hidden2
+        self.latent_dim = params.gcn_hidden2+64
         self.layer_num=3
         self.at=0.5
         # feature autoencoder
         self.encoder = nn.Sequential()
         self.encoder.add_module('encoder_L1', full_block(input_dim, params.feat_hidden1, params.p_drop))
         self.encoder.add_module('encoder_L2', full_block(params.feat_hidden1, params.feat_hidden2, params.p_drop))
-
+        self.quantize = VectorQuantizer(self.latent_dim, 64, beta=0.25)
         self.decoder = nn.Sequential()
-        self.decoder.add_module('decoder_L0', full_block(self.latent_dim, input_dim, params.p_drop))
+        self.decoder.add_module('decoder_L1', full_block(self.latent_dim, input_dim, params.p_drop))
         # params.p_drop=0.5
         # GCN layers
         self.gc1 = tg.nn.TransformerConv(params.feat_hidden2, params.gcn_hidden1, heads=1, dropout=params.p_drop)
@@ -1300,7 +1301,8 @@ class ST_Transformer_adaptive(nn.Module):
     def forward(self, x, adj,adj_prue,training):
         mu,feat_x = self.encode(x, adj,adj_prue,training)
         # gnn_z = self.reparameterize(mu, logvar)
-        z = torch.cat((feat_x, mu), 1)
+        quant, _, info = self.quantize(feat_x)
+        z = torch.cat((quant, mu), 1)
         de_feat = self.decoder(z)
         # print(gnn_z.shape)
         # DEC clustering
@@ -1430,7 +1432,7 @@ class ST_Transformer_adaptive_super_gai_new(nn.Module):
         mu,feat_x = self.encode(x, adj,adj_prue,training)
         # gnn_z = self.reparameterize(mu, logvar)
         z = torch.cat((feat_x, mu), 1)
-
+        
         if training:
             z_super = torch.zeros(6 * z.shape[0], z.shape[1]).cuda()
         # print(z.shape,enhanced_weights.shape,enhanced_index.shape,'werewr')
