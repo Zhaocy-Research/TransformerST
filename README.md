@@ -1,5 +1,5 @@
 # TransformerST
-**Transformer Enables Reference Free And Unsupervised Analysis of Spatial Transcriptomics**
+**Innovative Super-Resolution in Spatial Transcriptomics: A Transformer Model Exploiting Histology Images and Spatial Gene Expression**
 
 We develop a novel Transformer based framework (TransformerST) for associating the heterogeneity of local gene expression properties and revealing the dependency of structural relationship at near single cell resolution.TransformerST-super consists of three components, the conditional transformer based variational autoencoder, the adaptive graph Transformer model with multi-head attention, and the cross-scale super-resolved gene expression reconstruction model.
 
