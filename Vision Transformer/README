@@ -1,1 +1,2 @@
-Vision Transformer
+In our paper, the Vision Transformer should be executed initially to obtain the image-gene expression co-representation. Following this, the resulting output features should be concatenated with the spot embeddings. Finally, run the TransformerST to achieve clustering and enhanced gene expression analysis.
+Execute the command python3 main.py to train and evaluate the model, save the resultant output features, and subsequently concatenate these features with the spot embeddings.
