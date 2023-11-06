@@ -39,7 +39,8 @@ umap-learn
 (4) pip install -r requirements.txt
 
 **2. Instructions: Demo on mouse lung data.**   
- 
+Before running the demo below, initiate the process by executing the Vision Transformer model located in the Vision Transformer folder. This step is crucial for generating the image-gene expression co-representation. Once generated, concatenate this output with the spot embeddings. Then, you are ready to run the subsequent demo to achieve the desired clustering and super-resolution results.
+
 **2.1 Raw data**
 
 Raw data should be placed in the folder data.
