@@ -168,6 +168,30 @@ for proj_idx in range(len(proj_list)):
 
     params.cell_num = adata_h5.shape[0]
     print('==== Graph Construction Finished')
+    vision_transformer = False  # Set this to True or False depending on your specific case
+
+    # Check if using a vision transformer
+    if vision_transformer:
+      # If you want to combine the image vision transformer embedding with the original gene expression,
+      # concatenate the outputs. Otherwise, you might use only the gene expression data.
+      # Load image vision transformer embedding from a file
+      # If gene_pred is saved as a PyTorch tensor
+      gene_pred = torch.load('gene_pred.pt')
+      gene_pred = gene_pred.numpy()  # Convert it to numpy if it's a tensor
+      # Check if the dimensions match for concatenation
+      if adata_X.shape[1] == gene_pred.shape[1]:
+        # Process for vision transformer
+        # Include processing steps for vision transformer if necessary
+        print("Data will be processed for image-gene expression corepresentation using a vision transformer.")
+        # The following line is where you'd include your vision transformer processing
+        # For now, it just concatenates the arrays
+        adata_X = np.concatenate((adata_X, gene_pred), axis=0)
+      else:
+        raise ValueError('The number of columns (genes) in adata_X and gene_pred must be the same')
+    else:
+      # If not using a vision transformer, you may decide to use adata_X as is
+      # or any other processing you may want to apply
+      print("Using gene expression data without vision transformer processing.")
     # ################## Model training
     TransformerST_net = TransformerST_Train(adata_X, graph_dict,data1,graph_dict_prue,data1_prue,adata_h5.obsm['spatial'],params)
     if params.using_dec:
