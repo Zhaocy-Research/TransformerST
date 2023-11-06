@@ -79,7 +79,9 @@ The defination of each argument in Mouse_Lung_histology.py is listed below. The 
 '--eval_graph_n', type=int, default=20, help='Eval graph kN tol.' 
   
 **3. Instructions: Demo on IDC data.** 
- 
+
+Before running the demo below, initiate the process by executing the Vision Transformer model located in the Vision Transformer folder. This step is crucial for generating the image-gene expression co-representation. Once generated, concatenate this output with the spot embeddings. Then, you are ready to run the subsequent demo to achieve the desired clustering and super-resolution results.
+
 **3.1 Raw data**
 
 Raw data should be placed in the folder data.
