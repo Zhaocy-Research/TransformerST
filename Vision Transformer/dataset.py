@@ -69,7 +69,7 @@ class LUNG(torch.utils.data.Dataset):
     def __getitem__(self, index):
         i = index
         im = self.img_dict[self.id2name[i]]
-        im = im.permute(1, 0, 2)
+        #im = im.permute(1, 0, 2)
         exps = self.exp_dict[self.id2name[i]]
         centers = self.center_dict[self.id2name[i]]
         patch_dim = 3 * self.r * self.r * 4
@@ -124,8 +124,8 @@ class LUNG(torch.utils.data.Dataset):
                 'in_tissue',
                 'array_row',
                 'array_col',
-                'pxl_col_in_fullres',
                 'pxl_row_in_fullres',
+                'pxl_col_in_fullres',
         ]
         # Set the index to barcode for merging
         positions.set_index('barcode', inplace=True)
@@ -142,7 +142,7 @@ class LUNG(torch.utils.data.Dataset):
         # you might want to merge them into `adata.obs`
         non_overlap_columns = positions.columns.difference(adata.obs.columns)
         adata.obs = adata.obs.join(positions[non_overlap_columns], how="left")
-        adata.obsm['spatial'] = adata.obs[['array_row', 'array_col','pxl_col_in_fullres', 'pxl_row_in_fullres']].to_numpy()
+        adata.obsm['spatial'] = adata.obs[['array_row', 'array_col','pxl_row_in_fullres', 'pxl_col_in_fullres']].to_numpy()
         expression_data = adata.X
         expression_data = expression_data.todense()
         expression_data = torch.tensor(expression_data)
