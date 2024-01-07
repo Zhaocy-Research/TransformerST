@@ -37,6 +37,7 @@ umap-learn
 (2) conda create --name TransformerST  
 (3) conda activate TransformerST  
 (4) pip install -r requirements.txt
+TransformeST could also be installed via pip, pip install TransformerST
 
 **2. Instructions: Demo on mouse lung data.**  
 
