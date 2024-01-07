@@ -8,31 +8,31 @@ options(bitmapType = 'cairo')
 args <- commandArgs(trailingOnly = TRUE)
 sample <- args[1]
 #sample <- "151507"
-sp_data <- readRDS(file.path('/media/cyzhao/New_Volume/SEDR_analyses-master/output/DLPFC/', sample, '/Seurat/Seurat_final.rds'))
+sp_data <- readRDS(file.path('/media/cyzhao/New_Volume/output/DLPFC/', sample, '/Seurat/Seurat_final.rds'))
 
 ##### SpatialDimPlot
-metadata <- read.table(file.path('/media/cyzhao/New_Volume/SEDR_analyses-master/data/DLPFC/', sample, 'metadata.tsv'), sep='\t', header=TRUE)
+metadata <- read.table(file.path('/media/cyzhao/New_Volume/data/DLPFC/', sample, 'metadata.tsv'), sep='\t', header=TRUE)
 
 #spagcn_cluster <- read.table(file.path('./output/DLPFC/', sample, '/SpaGCN/metadata.tsv'), sep='\t', header=TRUE, row.names =1)
 #sedr_cluster$sed_labels <- sedr_cluster$leiden_fixed_clusCount
 
 # seurat_cluster <- read.table(file.path('./output/DLPFC/', sample, '/Seurat/metadata.tsv'), sep='\t', header=TRUE)
-Our_cluster <- read.table(file.path('/media/cyzhao/New_Volume/SEDR_analyses-master/output/DLPFC/', sample, '/SEDR/metadata.tsv'), sep='\t', header=TRUE)
-BayesSpace_cluster <- read.table(file.path('/media/cyzhao/New_Volume/SEDR_analyses-master/output/DLPFC/', sample, '/BayesSpace/metadata.tsv'), sep='\t', header=TRUE)
-spaGCN_cluster <- read.table(file.path('/media/cyzhao/New_Volume/SEDR_analyses-master/output/DLPFC/', sample, '/SpaGCN/metadata.tsv'), sep='\t', header=TRUE)
-Giotto_cluster <- read.table(file.path('/media/cyzhao/New_Volume/SEDR_analyses-master/output/DLPFC/', sample, '/Giotto/metadata.tsv'), sep='\t', header=TRUE)
+Our_cluster <- read.table(file.path('/media/cyzhao/New_Volume/output/DLPFC/', sample, '/TransformerST/metadata.tsv'), sep='\t', header=TRUE)
+BayesSpace_cluster <- read.table(file.path('/media/cyzhao/New_Volume/output/DLPFC/', sample, '/BayesSpace/metadata.tsv'), sep='\t', header=TRUE)
+spaGCN_cluster <- read.table(file.path('/media/cyzhao/New_Volume/output/DLPFC/', sample, '/SpaGCN/metadata.tsv'), sep='\t', header=TRUE)
+Giotto_cluster <- read.table(file.path('/media/cyzhao/New_Volume/output/DLPFC/', sample, '/Giotto/metadata.tsv'), sep='\t', header=TRUE)
 row.names(Giotto_cluster) <- Giotto_cluster$cell_ID
-stLearn_cluster <- read.table(file.path('/media/cyzhao/New_Volume/SEDR_analyses-master/output/DLPFC/', sample, '/stLearn/metadata.tsv'), sep='\t', header=TRUE)
-ccst_cluster <-read.table(file.path('/media/cyzhao/New_Volume/SEDR_analyses-master/output/DLPFC/', sample, '/lambdaI0.3/metadata.tsv'), sep='\t', header=TRUE)
-STAGATE_cluster <-read.table(file.path('/media/cyzhao/New_Volume/SEDR_analyses-master/output/DLPFC/', sample, '/STAGATE1/metadata.tsv'), sep='\t', header=TRUE)
-CONST_cluster <-read.table(file.path('/media/cyzhao/New_Volume/SEDR_analyses-master/output/DLPFC/', sample, '/conST/metadata.tsv'), sep='\t', header=TRUE)
-DEEPST_cluster <-read.table(file.path('/media/cyzhao/New_Volume/SEDR_analyses-master/output/DLPFC/', sample, '/DEEPST/metadata.tsv'), sep='\t', header=TRUE)
+stLearn_cluster <- read.table(file.path('/media/cyzhao/New_Volume/output/DLPFC/', sample, '/stLearn/metadata.tsv'), sep='\t', header=TRUE)
+ccst_cluster <-read.table(file.path('/media/cyzhao/New_Volume/output/DLPFC/', sample, '/lambdaI0.3/metadata.tsv'), sep='\t', header=TRUE)
+STAGATE_cluster <-read.table(file.path('/media/cyzhao/New_Volume/output/DLPFC/', sample, '/STAGATE1/metadata.tsv'), sep='\t', header=TRUE)
+CONST_cluster <-read.table(file.path('/media/cyzhao/New_Volume/output/DLPFC/', sample, '/conST/metadata.tsv'), sep='\t', header=TRUE)
+DEEPST_cluster <-read.table(file.path('/media/cyzhao/New_Volume/output/DLPFC/', sample, '/DEEPST/metadata.tsv'), sep='\t', header=TRUE)
 truth <- as.factor(metadata$layer_guess)
 truth <- factor(truth, levels=c('WM', 'nan', 'Layer6', 'Layer5', 'Layer4', 'Layer3', 'Layer2', 'Layer1'))
 sp_data <- AddMetaData(sp_data, truth, col.name = 'layer_guess')
 sp_data <- AddMetaData(sp_data, spaGCN_cluster$refined_pred, col.name = 'SpaGCN')
 # sp_data <- AddMetaData(sp_data, seurat_cluster$seurat_clusters, col.name = 'Seurat')
-sp_data <- AddMetaData(sp_data, Our_cluster$SEDR, col.name = 'TransformerST')
+sp_data <- AddMetaData(sp_data, Our_cluster$TransformerST, col.name = 'TransformerST')
 sp_data <- AddMetaData(sp_data, BayesSpace_cluster$spatial.cluster, col.name = 'BayesSpace')
 sp_data <- AddMetaData(sp_data, Giotto_cluster[, 'HMRF_cluster', drop=F], col.name = 'Giotto')
 sp_data <- AddMetaData(sp_data, stLearn_cluster$X_pca_kmeans, col.name = 'stLearn')
