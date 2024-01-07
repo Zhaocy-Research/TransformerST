@@ -1,1 +1,3 @@
 In our TransformerST analysis, we used 'DLPFC.ARI_boxplot.R' to generate Figure 2c, and 'DLPFC_comp.R' was employed to create Figure 2a and Figure 2b.
+
+The DLPFC_BayesSpace.R script is designed to execute BayesSpace analyses and compare its results with other methods. Meanwhile, the DLPFC_SpaGCN script is specifically used for running SpaGCN results.
