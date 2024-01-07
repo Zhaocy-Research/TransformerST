@@ -119,7 +119,11 @@ The defination of each argument in IDC_super_TransformerST.py is listed below. T
 '--eval_resolution', type=int, default=1, help='Eval cluster number.'  
 '--eval_graph_n', type=int, default=20, help='Eval graph kN tol.'  
 
-**4. More datasets used in TransformerST:**
+**4 TransformerST analysis:**
+
+In the TransformerST analysis folder, we include two R notebooks for generating Figures 2a and 2c, along with a README file that guides you through the folder's contents.
+
+**5. More datasets used in TransformerST:**
 
 (1) LIBD human dorsolateral pre-frontal cortex data (DLPFC) (http://research.libd.org/spatialLIBD/); 
 
