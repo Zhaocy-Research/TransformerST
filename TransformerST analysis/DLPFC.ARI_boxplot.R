@@ -9,7 +9,6 @@ library(mclust)
 options(bitmapType = 'cairo')
 
 list.samples <- c("151507", "151508", "151509", "151510", "151669", "151670", "151671", "151672", "151673", "151674", "151675", "151676")
-#list.methods <- c( "Seurat", "stLearn",  "BayesSpace", "SEDR","SEDR_label")
 
 list.methods <- c( "Mclust","Kmeans", "Louvain","Giotto","stLearn", "SpaGCN", "BayesSpace","CCST","STAGATE","CONST","DEEPST", "TransformerST")
 
