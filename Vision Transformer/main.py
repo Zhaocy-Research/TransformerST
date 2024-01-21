@@ -11,7 +11,6 @@ from PIL import Image
 
 
 
-
 def main():
     fold = 1
     tag = '-vit_1_1_cv'
