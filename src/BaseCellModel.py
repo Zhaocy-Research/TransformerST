@@ -6,7 +6,6 @@ import torch
 from torch import nn, optim
 from scETM.batch_sampler import CellSampler
 
-
 _logger = logging.getLogger(__name__)
 
 
