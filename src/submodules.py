@@ -16,6 +16,10 @@ act = nn.LeakyReLU(LEAKY_VALUE,inplace=True)
 
 # out_shape = (H-1)//stride + 1 # for dilation=1
 def conv(in_channels, out_channels, kernel_size=3, act=True, stride=1, groups=1, bias=True):
+"""
+Constructs a convolutional layer (1D) with optional LeakyReLU activation. 
+It's a basic building block for neural network models, particularly useful for feature extraction from sequences or time-series data.
+"""
     m = []
     m.append(nn.Conv1d(in_channels, out_channels, kernel_size=kernel_size, stride=stride,
         padding=(kernel_size-1)//2, groups=groups, bias=bias))
@@ -33,6 +37,9 @@ def conv(in_channels, out_channels, kernel_size=3, act=True, stride=1, groups=1,
 
 
 class ResBlock(nn.Module):
+"""
+Implements a residual block using 1D convolutional layers, commonly used in deep learning architectures to enable training of deeper networks by allowing better gradient flow.
+"""
     def __init__(self, n_feats, kernel_size=3, res_scale=1, bias=True):
 
         super(ResBlock, self).__init__()
@@ -97,7 +104,8 @@ class ResBlock(nn.Module):
 # ----------GCNBlock---------- #
 class Graph(nn.Module):
     r"""
-    Graph Construction
+    Designed for graph construction in neural networks. 
+    It processes input features to construct a graph by determining node connections and weights, useful in graph-based learning tasks.
     """
     def __init__(self, scale, k=5, patchsize=3, stride=1, window_size=20, in_channels=256, embedcnn=None):
         r"""
@@ -143,7 +151,8 @@ class Graph(nn.Module):
 
 class GCNBlock(nn.Module):
     r"""
-    Graph Aggregation
+    Graph Aggregation. A Graph Convolutional Network block that aggregates features from graph nodes. 
+    This class is key in learning high-level features in graph-structured data.
     """
     def __init__(self, scale, k=5, patchsize=3, stride=1, diff_n=192):
         r"""
@@ -234,7 +243,8 @@ class GCNBlock(nn.Module):
 
 class Graph_spatial(nn.Module):
     r"""
-    Graph Construction
+    Similar to Graph, but tailored for spatial data. 
+    It constructs a graph considering the spatial arrangement of features, which is critical in tasks like image processing or spatial genomics.
     """
 
     def __init__(self, scale, k=10, patchsize=3, stride=1, window_size=20, in_channels=256, embedcnn=None):
@@ -281,7 +291,8 @@ class Graph_spatial(nn.Module):
 
 class GCNBlock_spatial(nn.Module):
     r"""
-    Graph Aggregation
+    A spatial variant of the GCNBlock, focusing on aggregating spatially structured data. 
+    It's particularly useful in scenarios where spatial relationships are crucial, such as in computer vision tasks.
     """
 
     def __init__(self, scale, k=5, patchsize=3, stride=1, diff_n=192):
@@ -366,7 +377,7 @@ class GCNBlock_spatial(nn.Module):
         return knn_lr, knn_hr
 class Graph_TransformerST(nn.Module):
     r"""
-    Graph Construction
+    Designed for integrating graph-based approaches with TransformerST models. 
     """
 
     def __init__(self, scale=1, k=2, patchsize=1, stride=1):
@@ -405,7 +416,7 @@ class Graph_TransformerST(nn.Module):
         return super_adata,dis
 class GCNBlock_TransformerST(nn.Module):
     r"""
-    Graph Aggregation
+    Graph Aggregation. A Graph Convolutional Network block designed to work with TransformerST models. 
     """
 
     def __init__(self, k=5, patchsize=3, stride=1):
