@@ -10,7 +10,6 @@ from torch.nn.parameter import Parameter
 
 from torch_geometric.nn import inits
 
-
 class Linear(torch.nn.Module):
     r"""Applies a linear tranformation to the incoming data
 
