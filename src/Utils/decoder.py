@@ -1,7 +1,6 @@
 # Based on https://github.com/kasparmartens/BasisVAE/blob/master/BasisVAE/decoder.py
 # Originally authored by Kaspar Märtens
 # Significant added components: StandardDecoder, ODEDecoder, BasisODEDecoder
-
 import numpy as np
 
 import torch
