@@ -6,7 +6,6 @@ import numpy as np
 
 import torch
 import torch.nn as nn
-
 from torch.nn.functional import softplus
 from torch.nn import functional as F
 
