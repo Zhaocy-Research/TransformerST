@@ -29,6 +29,8 @@ for i in IG.values():
 LYM = {'B_cell':BCELL, 'CD4+T_cell':CD4T, 'CD8+T_cell':CD8T}
 
 def read_tiff(path):
+"""
+Loads and converts a TIFF image file into a NumPy array. """
     Image.MAX_IMAGE_PIXELS = 933120000
     im = Image.open(path)
     imarray = np.array(im)
@@ -36,6 +38,9 @@ def read_tiff(path):
     return im
 
 def preprocess(adata, n_keep=1000, include=LYM, g=True):
+        """
+        Performs data preprocessing on an AnnData object. 
+        """
     adata.var_names_make_unique()
     sc.pp.normalize_total(adata)
     sc.pp.log1p(adata)
@@ -73,6 +78,10 @@ def preprocess(adata, n_keep=1000, include=LYM, g=True):
     return adata
 
 def comp_umap(adata):
+        """
+        Computes UMAP (Uniform Manifold Approximation and Projection) for 
+        dimensionality reduction and clustering (using Leiden algorithm) on an AnnData object. 
+        """
     sc.pp.pca(adata)
     sc.pp.neighbors(adata)
     sc.tl.umap(adata)
@@ -80,6 +89,9 @@ def comp_umap(adata):
     return adata
 
 def comp_tsne_km(adata,k=10):
+        """
+        Applies PCA and t-SNE for dimensionality reduction and uses KMeans clustering to classify data points in an AnnData object.
+        """
     sc.pp.pca(adata)
     sc.tl.tsne(adata)
     kmeans = KMeans(n_clusters=k, init="k-means++", random_state=0).fit(adata.obsm['X_pca'])
@@ -87,6 +99,9 @@ def comp_tsne_km(adata,k=10):
     return adata
 
 def co_embed(a,b,k=10):
+"""
+Merges two AnnData objects a and b, applies PCA and t-SNE for dimensionality reduction, and performs KMeans clustering. 
+"""
     a.obs['tag'] = 'Truth'
     b.obs['tag'] = 'Pred'
     adata = ad.concat([a,b])
@@ -97,6 +112,10 @@ def co_embed(a,b,k=10):
     return adata
 
 def build_adata(name='H1'):
+"""
+Constructs an AnnData object from spatial transcriptomics data. It loads count data, image files, 
+and spatial coordinates, processes the data, and returns an AnnData object along with the corresponding image. 
+"""
     cnt_dir = 'data/her2st/data/ST-cnts'
     img_dir = 'data/her2st/data/ST-imgs'
     pos_dir = 'data/her2st/data/ST-spotfiles'
@@ -130,6 +149,9 @@ def build_adata(name='H1'):
 
 
 def get_data(dataset='bc1', n_keep=1000, include=LYM, g=True):
+        """
+        Retrieves and preprocesses spatial transcriptomics data from a specified dataset. 
+        """
     if dataset == 'bc1':
        adata = sc.datasets.visium_sge(sample_id='V1_Breast_Cancer_Block_A_Section_1', include_hires_tiff=True)
        adata = preprocess(adata, n_keep, include, g)
