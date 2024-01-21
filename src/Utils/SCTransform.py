@@ -8,7 +8,6 @@ import pandas as pd
 import statsmodels.discrete.discrete_model
 from anndata import AnnData
 import scipy as sp
-
 _EPS = np.finfo(float).eps
 
 def robust_scale_binned(y, x, breaks):
