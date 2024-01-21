@@ -9,7 +9,14 @@ from .model_utils import get_fully_connected_layers
 from scETM.logging_utils import log_arguments
 
 class BatchClassifier(nn.Module):
-    """Docstring (TODO)
+    """
+    BatchClassifier is a neural network module for classification tasks, built with PyTorch.
+    It features customizable architecture with options for batch normalization, dropout,
+    and adversarial loss strategies. The class includes methods for initializing the network,
+    performing a forward pass, and executing a training step. It is designed to handle
+    batch-wise processing, making it suitable for training on large datasets. The classifier
+    supports different configurations for layer sizes, normalization, and loss computation,
+    allowing for flexible model tuning.
     """
 
     @log_arguments
