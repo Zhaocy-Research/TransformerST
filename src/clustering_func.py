@@ -11,11 +11,17 @@ from sklearn.cluster import SpectralClustering
 
 
 def get_umap(node_embs):
+    """
+    This function applies Uniform Manifold Approximation and Projection (UMAP) to reduce the dimensionality of node embeddings.
+    """
     reducer = umap.UMAP(n_neighbors=20, metric='cosine', random_state=42)
     return reducer.fit_transform(node_embs)
 
 
 def proc_clustering(feature, params):
+    """
+    Processes clustering on the given feature data. It supports different clustering methods such as Louvain, KMeans, and Spectral Clustering. 
+    """
     latent_z_adj = kneighbors_graph(feature, params.eval_graph_n, mode='connectivity', include_self=True)
     if params.eval_cluster_type == 'Louvain':
         print('==== Clustering by Louvain')
@@ -34,6 +40,9 @@ def proc_clustering(feature, params):
 
 
 def eval_clustering(feat_dict, save_path, params, label=None):
+    """
+    Evaluates clustering results by applying the proc_clustering function to different sets of features
+    """
     # clustering
     sed_labels = proc_clustering(feat_dict['sed_feat'], params)
     df_result = pd.DataFrame(sed_labels, columns=['sed_labels'])
@@ -52,6 +61,9 @@ def eval_clustering(feat_dict, save_path, params, label=None):
 
 
 def plot_umap(node_feature, latent_z, save_path, params, label=None, colormap='tab20'):
+    """
+    Generates UMAP visualizations for original node features and latent representations, plotting the results with different labels obtained from clustering.
+    """
     print('==== Computing UMAP by node_feature')
     umap_org = get_umap(node_feature)
     print('==== Computing UMAP by latent_z')
