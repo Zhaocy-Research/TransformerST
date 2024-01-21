@@ -9,7 +9,6 @@ from sknetwork.clustering import Louvain, KMeans
 from sklearn.neighbors import kneighbors_graph
 from sklearn.cluster import SpectralClustering
 
-
 def get_umap(node_embs):
     """
     This function applies Uniform Manifold Approximation and Projection (UMAP) to reduce the dimensionality of node embeddings.
