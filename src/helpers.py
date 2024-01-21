@@ -7,6 +7,9 @@ from torch.distributions.normal import Normal
 import torch.nn.functional as F
 
 def ELBO_collapsed_Categorical(logits_phi, alpha, K, N):
+    """
+    This function calculates the Evidence Lower Bound (ELBO) for a collapsed categorical distribution
+    """
     phi = torch.softmax(logits_phi, dim=1)
 
     sum_alpha = alpha.sum()
@@ -20,6 +23,9 @@ def ELBO_collapsed_Categorical(logits_phi, alpha, K, N):
 
 
 def KL_standard_normal(mu, sigma):
+    """
+    This function computes the Kullback-Leibler (KL) divergence 
+    """
     p = Normal(torch.zeros_like(mu), torch.ones_like(mu))
     q = Normal(mu, sigma)
     return torch.sum(torch.distributions.kl_divergence(q, p))
@@ -27,6 +33,7 @@ def KL_standard_normal(mu, sigma):
 
 def NB_log_prob(x, mu, theta, eps=1e-8):
     """
+    This function calculates the log probability of data under a Negative Binomial (NB) distribution. 
     Adapted from https://github.com/YosefLab/scVI/blob/master/scvi/models/log_likelihood.py
     """
 
@@ -44,6 +51,7 @@ def NB_log_prob(x, mu, theta, eps=1e-8):
 
 def ZINB_log_prob(x, mu, theta, pi, eps=1e-8):
     """
+    this function computes the log probability under a Zero-Inflated Negative Binomial (ZINB) distribution
     Adapted from https://github.com/YosefLab/scVI/blob/master/scvi/models/log_likelihood.py
     """
 
