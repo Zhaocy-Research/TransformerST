@@ -15,6 +15,9 @@ import torch.nn.functional as F
 import cv2
 
 def mkdir(path):
+    """
+    Creates a directory at the specified path. If intermediate directories in the path do not exist, it recursively creates them too.
+    """
     if not os.path.isdir(path):
         mkdir(os.path.split(path)[0])
     else:
@@ -22,11 +25,17 @@ def mkdir(path):
     os.mkdir(path)
 
 def var_or_cuda(x):
+    """
+    Transfers a given tensor to GPU, if CUDA is available, for efficient computation.
+    """
     if torch.cuda.is_available():
         x = x.cuda(non_blocking=True)
     return x
 
 def initialize_weights(net_l, scale=1):
+    """
+    Initializes the weights of neural network layers
+    """
     if not isinstance(net_l, list):
         net_l = [net_l]
     for net in net_l:
@@ -65,6 +74,9 @@ def set_random_seed(seed, deterministic=False):
 
 
 def save_checkpoint(file_path, file_name, epoch_idx, net, solver, best_PSNR, best_epoch):
+    """
+    Saves the current state of a training model as a checkpoint file. 
+    """
     if not os.path.exists(file_path): 
         mkdir(file_path)
     file_path = os.path.join(file_path, file_name)
@@ -79,12 +91,21 @@ def save_checkpoint(file_path, file_name, epoch_idx, net, solver, best_PSNR, bes
     torch.save(checkpoint, file_path)
 
 def count_parameters(model):
+    """
+    Returns the total number of trainable parameters in a neural network model
+    """
     return sum(p.numel() for p in model.parameters())
 
 def get_weight_parameters(model):
+    """
+    Retrieve all weight and bias parameters
+    """
     return [param for name, param in model.named_parameters() if ('weight' in name)]
 
 def get_bias_parameters(model):
+    """
+    Retrieve all weight and bias parameters
+    """
     return [param for name, param in model.named_parameters() if ('bias' in name)]
 
 class AverageMeter(object):
@@ -112,6 +133,9 @@ class AverageMeter(object):
 # Image convert functions
 ##################################
 def crop_like(input, target):
+    """
+    Crops an input tensor to match the size of a target tensor, used in image processing where input and target sizes need to align.
+    """
     if input.size()[2:] == target.size()[2:]:
         return input
     else:
@@ -213,6 +237,9 @@ def bgr2ycbcr(img, only_y=True):
 ##################################
 
 def adaptive_instance_normalization(center_feat, knn_feat, eps=1e-5):
+    """
+    Applies adaptive instance normalization to features, normalizing them based on statistics (mean and variance) of another feature set. 
+    """
     # center_feat = center_feat.contiguous()
     # knn_feat = knn_feat.contiguous()
     b,m,c,p = center_feat.size()
@@ -236,6 +263,9 @@ def adaptive_instance_normalization(center_feat, knn_feat, eps=1e-5):
 # Efficient and effective test
 ##################################
 class Chop(nn.Module):
+    """
+    A module that divides large images into smaller patches for processing and then stitches them back together. 
+    """
     def __init__(self, model):
         super(Chop, self).__init__()
         self.model = model
