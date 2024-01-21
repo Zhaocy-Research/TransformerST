@@ -11,6 +11,9 @@ import math
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 
 class lung_finetune_flex(pl.LightningModule):
+    """
+    spatial transcriptomics task in lung tissue. This class defines a neural network architecture and its training, validation, and testing routines.
+    """
     def __init__(self, patch_size=112, n_layers=4, n_genes=1000, dim=1024, learning_rate=1e-4, dropout=0.1, n_pos=128):
         super().__init__()
         self.learning_rate = learning_rate
