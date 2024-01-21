@@ -3,6 +3,9 @@ import numpy as np
 import cv2
 
 def scan_contour(spots, scan_x=True, shape="hexagon"):
+	"""
+ 	This function scans a set of spatial transcriptomic spots to create a contour boundary based on their spatial distribution. 
+  	"""
 	#shape="hexagon" # For 10X Vsium, shape="square" for ST data
 	if scan_x:
 		array_a="array_row"
@@ -56,6 +59,10 @@ def cv2_detect_contour(img,
 	apertureSize=5,
 	L2gradient = True,
 	all_cnt_info=False):
+	"""
+ 	 Utilizes OpenCV's capabilities to detect contours in an image. 
+   	It first converts the image to grayscale (if necessary) and applies Canny edge detection to find edges in the image. 
+  	"""
 	if len(img.shape)==3:
 		gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
 	elif len(img.shape)==2:
@@ -78,6 +85,10 @@ def cv2_detect_contour(img,
 
 
 def cut_contour_boundary(cnt, x_min, x_max, y_min, y_max, enlarge):
+	"""
+ 	Adjusts a given contour to fit within specified boundary limits. 
+  	It ensures that the contour coordinates do not exceed the provided minimum and maximum x and y values. 
+  	"""
 	ret=cnt.copy()
 	ret[:, : , 0][ret[:, : , 0]>y_max]=y_max
 	ret[:, : , 0][ret[:, : , 0]<y_min]=y_min
@@ -86,6 +97,10 @@ def cut_contour_boundary(cnt, x_min, x_max, y_min, y_max, enlarge):
 	return ret
 
 def scale_contour(cnt, scale):
+	"""
+ 	Scales a contour by a specified factor around its centroid. 
+  	It calculates the center of the contour and normalizes the contour points relative to this center.
+  	"""
 	M = cv2.moments(cnt)
 	cx = int(M['m10']/M['m00'])
 	cy = int(M['m01']/M['m00'])
