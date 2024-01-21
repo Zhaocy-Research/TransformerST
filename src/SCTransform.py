@@ -12,6 +12,14 @@ import scipy as sp
 _EPS = np.finfo(float).eps
 
 def robust_scale_binned(y, x, breaks):
+    """
+    Purpose: This function scales the values in y within bins determined by x and breaks. It uses a robust scaling method that centers around the median and scales according to the median absolute deviation.
+    Inputs:
+        y: Array-like, the data to be scaled.
+        x: Array-like, corresponding values used to determine the binning.
+        breaks: Array-like, the breakpoints to create bins in x.
+    Output: An array where the values in y have been scaled within each bin.
+    """
     bins = np.digitize(x,breaks)
     binsu = np.unique(bins)
     res = np.zeros(bins.size)
@@ -23,6 +31,14 @@ def robust_scale_binned(y, x, breaks):
 
 
 def is_outlier(y, x, th = 10):
+    """
+    Purpose: Identifies outliers in the data y based on the distribution of x. It uses a KDE (Kernel Density Estimate) and robust scaling to determine outlier scores.
+    Inputs:
+        y: Array-like, the data in which outliers are to be identified.
+        x: Array-like, corresponding values used for KDE and binning.
+        th: Float, threshold for determining outliers. Higher values are more conservative.
+    Output: A boolean array where True indicates an outlier.
+    """
     z = FFTKDE(kernel='gaussian', bw='ISJ').fit(x)
     z.evaluate();
     bin_width = (max(x) - min(x)) * z.bw / 2
@@ -36,6 +52,12 @@ def is_outlier(y, x, th = 10):
   
     
 def _parallel_init(igenes_bin_regress,iumi_bin,ign,imm,ips):
+    """
+    Purpose: Initializes global variables for parallel processing.
+    Inputs:
+        igenes_bin_regress, iumi_bin, ign, imm, ips: Various datasets and parameters used in parallel processing.
+    Output: None. Sets global variables.
+    """
     global genes_bin_regress
     global umi_bin
     global gn
@@ -48,6 +70,12 @@ def _parallel_init(igenes_bin_regress,iumi_bin,ign,imm,ips):
     ps = ips
     
 def _parallel_wrapper(j):
+    """
+    Purpose: A wrapper function for parallel processing. It performs regression and parameter estimation on subsets of data.
+    Inputs:
+        j: Index for the subset of data to be processed.
+    Output: None. Updates global variables with the results.
+    """
     name = gn[genes_bin_regress[j]]
     y = umi_bin[:,j].A.flatten()
     pr = statsmodels.discrete.discrete_model.Poisson(y,mm)
@@ -58,11 +86,26 @@ def _parallel_wrapper(j):
     
     
 def gmean(X,axis=0,eps=1):
+    """
+    Purpose: Computes the geometric mean of the array X.
+    Inputs:
+        X: Array-like, the data for which the geometric mean is computed.
+        axis: The axis along which to compute the mean.
+        eps: A small value added for numerical stability.
+    Output: The geometric mean of X.
+    """
     X=X.copy()
     X.data[:] = np.log(X.data+eps)       
     return np.exp(X.mean(axis).A.flatten())-eps
 
 def theta_ml(y,mu):
+    """
+    Purpose: Estimates the theta parameter in a statistical model, possibly related to Poisson or negative binomial distribution.
+    Inputs:
+        y: Observed data.
+        mu: Expected mean values.
+    Output: The estimated theta parameter.
+    """
     n = y.size
     weights = np.ones(n)
     limit = 10
@@ -97,6 +140,12 @@ def SCTransform(adata,min_cells=5,gmean_eps=1,n_genes=2000,n_cells=None,bin_size
     
     The only significant modification is that negative Pearson residuals are zero'd out to preserve
     the sparsity structure of the data.
+    
+    Purpose: This is a complex function that appears to perform a data transformation similar to the SCTransform method used in single-cell genomic analysis. It involves normalization, outlier detection, and regression analysis.
+    Inputs:
+        adata: The primary data input, likely an AnnData object used in single-cell analysis.
+        Various other parameters for controlling the transformation.
+    Output: Either modifies adata in place or returns a new AnnData object, depending on the inplace parameter.
     """
     X=adata.X.copy()
     X=sp.sparse.csr_matrix(X)
