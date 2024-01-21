@@ -9,6 +9,11 @@ from torch_geometric.utils import erdos_renyi_graph, to_networkx, from_networkx
 
 @numba.njit("f4(f4[:], f4[:])")
 def euclid_dist(t1,t2):
+"""
+Calculates the Euclidean distance between two vectors (t1, t2). 
+It squares the difference between corresponding elements of these vectors, 
+sums them up, and then takes the square root of this sum.
+"""
 	sum=0
 	for i in range(t1.shape[0]):
 		sum+=(t1[i]-t2[i])**2
@@ -16,6 +21,10 @@ def euclid_dist(t1,t2):
 
 @numba.njit("f4[:,:](f4[:,:])", parallel=True, nogil=True)
 def pairwise_distance(X):
+"""
+Computes a distance matrix for a given set of points (X) where each entry (i,j) represents the Euclidean distance between points i and j. 
+Optimized with numba for faster execution, especially beneficial for large datasets.
+"""
 	n=X.shape[0]
 	adj=np.empty((n, n), dtype=np.float32)
 	for i in numba.prange(n):
@@ -23,6 +32,11 @@ def pairwise_distance(X):
 			adj[i][j]=euclid_dist(X[i], X[j])
 	return adj
 def calculate_adj_matrix(x, y, x_pixel=None, y_pixel=None, image=None, beta=49, alpha=1, histology=True):
+"""
+Constructs an adjacency matrix for a set of spatial data points. 
+If histology is true, it integrates histological image data to enhance spatial relationships. 
+This function is essential in spatial graph-based models, where the adjacency matrix defines the connectivity of nodes.
+"""
 #x,y,x_pixel, y_pixel are lists
     if histology:
         assert (x_pixel is not None) & (x_pixel is not None) & (image is not None)
@@ -62,6 +76,10 @@ def calculate_adj_matrix(x, y, x_pixel=None, y_pixel=None, image=None, beta=49, 
 
 # edgeList to edgeDict
 def edgeList2edgeDict(edgeList, nodesize):
+"""
+Transforms an edge list (where each edge is represented as a pair of node indices) into a dictionary. 
+The dictionary maps each node to a list of its connected nodes, facilitating graph operations.
+"""
     graphdict = {}
     tdict = {}
     for edge in edgeList:
@@ -85,7 +103,8 @@ def edgeList2edgeDict(edgeList, nodesize):
 
 
 def sparse_mx_to_torch_sparse_tensor(sparse_mx):
-    """Convert a scipy sparse matrix to a torch sparse tensor."""
+    """Converts a scipy sparse matrix into a PyTorch sparse tensor. 
+    This is crucial for using graph data in PyTorch-based deep learning models, especially in graph neural networks."""
     sparse_mx = sparse_mx.tocoo().astype(np.float32)
     indices = torch.from_numpy(np.vstack((sparse_mx.row, sparse_mx.col)).astype(np.int64))
     values = torch.from_numpy(sparse_mx.data)
@@ -95,6 +114,10 @@ def sparse_mx_to_torch_sparse_tensor(sparse_mx):
 
 # ====== Graph preprocessing
 def preprocess_graph(adj):
+"""
+Normalizes an adjacency matrix based on the degree matrix and adds self-loops to each node. 
+This step is critical in preparing the graph for learning algorithms, as it regularizes the node degrees.
+"""
     adj = sp.coo_matrix(adj)
     adj_ = adj + sp.eye(adj.shape[0])
     rowsum = np.array(adj_.sum(1))
@@ -102,9 +125,18 @@ def preprocess_graph(adj):
     adj_normalized = adj_.dot(degree_mat_inv_sqrt).transpose().dot(degree_mat_inv_sqrt).tocoo()
     return sparse_mx_to_torch_sparse_tensor(adj_normalized)
 def calculate_p(adj, l):
+"""
+Computes a parameter p for graph scaling based on adjacency distances. 
+It's used to control the influence range of a node in the graph, affecting how graph-based learning algorithms perceive neighborhood relations.
+"""
     adj_exp=np.exp(-1*(adj**2)/(2*(l**2)))
     return np.mean(np.sum(adj_exp,1))-1
 def search_l(p, adj, start=0.01, end=1000, tol=0.01, max_run=100):
+"""
+Finds an optimal length scale for an adjacency matrix. 
+The length scale controls how distance is translated into edge weights, impacting the graph's topology. 
+It's an iterative process that aims to match a target metric p within a tolerance.
+"""
     run=0
     p_low=calculate_p(adj, start)
     p_high=calculate_p(adj, end)
@@ -139,6 +171,10 @@ def search_l(p, adj, start=0.01, end=1000, tol=0.01, max_run=100):
             p_high=p_mid
 # ====== Graph construction
 def graph_computing1(adj_coo, cell_num, img,params):
+"""
+ Builds a graph by considering spatial distances between nodes. 
+ It uses a distance threshold to decide whether to create an edge between two nodes, thereby defining the neighborhood relationships in the graph.
+"""
     edgeList = []
     # print(adj_coo.shape)
     # b=49
@@ -164,6 +200,10 @@ def graph_computing1(adj_coo, cell_num, img,params):
 
     return edgeList
 def graph_computing_adaptive(adj_coo, cell_num, init_label,params):
+"""
+Constructs an adaptive graph by considering additional features along with spatial distances. 
+This method can lead to a more nuanced graph structure where edges reflect both spatial proximity and feature similarity.
+"""
     edgeList = []
     # print(adj_coo.shape)
     # b=49
@@ -209,6 +249,10 @@ def graph_computing_adaptive(adj_coo, cell_num, init_label,params):
             # tmp1 = x_feature[node_idx, :].reshape(1, -1)
     return edgeList
 def graph_computing_adaptive_histology(adj_coo, cell_num, init_label,histology,params):
+"""
+Creates an adaptive graph using spatial data and integrates histological image information. 
+This is particularly useful in biomedical applications where spatial and histological data are both relevant.
+"""
     edgeList = []
     # print(adj_coo.shape)
     # b=49
@@ -254,6 +298,10 @@ def graph_computing_adaptive_histology(adj_coo, cell_num, init_label,histology,p
             # tmp1 = x_feature[node_idx, :].reshape(1, -1)
     return edgeList
 def graph_computing_new(adj_coo, cell_num, x_feature,params):
+"""
+Forms a graph using a combination of spatial distances and feature-based information. 
+It can create edges based on spatial closeness or feature similarity, leading to a richer network structure.
+"""
     edgeList = []
     # print(adj_coo.shape)
     # b=49
@@ -286,6 +334,10 @@ def graph_computing_new(adj_coo, cell_num, x_feature,params):
 
     return edgeList
 def graph_computing_new1(adj_coo, cell_num, x_feature,params):
+"""
+Enhances the graph construction process by combining spatial distances with feature similarities and applying a boundary condition. 
+This approach allows for more complex graph structures, possibly leading to improved model performance in tasks like clustering or classification.
+"""
     edgeList = []
     # print(adj_coo.shape)
     # b=49
@@ -331,6 +383,12 @@ def graph_computing_new1(adj_coo, cell_num, x_feature,params):
             # tmp1 = x_feature[node_idx, :].reshape(1, -1)
     return edgeList
 def graph_computing_super(x_feature,adj_coo, cell_num, init_label,params):
+"""
+This function is designed for super-resolution graph construction. 
+It constructs a graph by integrating high-resolution spatial data with additional feature information. 
+The method is particularly useful in scenarios where super-resolution is required to enhance the detail and quality of the graph representation, 
+such as in detailed spatial analyses or in contexts where finer granularity in graph structure is crucial.
+"""
     edgeList = []
     # print(adj_coo.shape)
     # b=49
@@ -433,6 +491,10 @@ def graph_computing_super(x_feature,adj_coo, cell_num, init_label,params):
         #     # tmp1 = x_feature[node_idx, :].reshape(1, -1)
     return edgeList,x_feature_all
 def graph_computing(adj_coo, cell_num, params):
+"""
+Generates a basic graph structure from spatial data using distance-based criteria for edge formation. 
+This function is suitable for applications where spatial proximity is the sole criterion for node connectivity.
+"""
     edgeList = []
     # b=49
     # s=1
@@ -452,6 +514,10 @@ def graph_computing(adj_coo, cell_num, params):
 
     return edgeList
 def TransformerST_graph_construction1(adj_coo, cell_N, img,params):
+"""
+Tailored for the TransformerST model, this function constructs a graph with adaptive adjacency matrices, integrating spatial and feature data. 
+It is designed to enhance the TransformerST model's ability to process spatially structured data.
+"""
     adata_Adj = graph_computing_adaptive(adj_coo, cell_N, img,params)
     graphdict = edgeList2edgeDict(adata_Adj, cell_N)
     adj_org = nx.adjacency_matrix(nx.from_dict_of_lists(graphdict))
@@ -481,6 +547,11 @@ def TransformerST_graph_construction1(adj_coo, cell_N, img,params):
 
     return graph_dict,data1
 def graph_construction_super(x,adj_coo, cell_N, img,params):
+"""
+Tailored for super-resolution applications, this function builds a graph by incorporating high-resolution data into the spatial graph structure. 
+It enhances the graph representation by adding finer detail and accuracy, making it particularly valuable in contexts where high-resolution insights are essential. 
+The function is adept at handling super-resolution data, ensuring that the resulting graph captures the intricacies and nuances of such detailed information.
+"""
     adata_Adj,x_feature = graph_computing_super(x,adj_coo, cell_N, img,params)
     graphdict = edgeList2edgeDict(adata_Adj, cell_N)
     adj_org = nx.adjacency_matrix(nx.from_dict_of_lists(graphdict))
@@ -510,6 +581,10 @@ def graph_construction_super(x,adj_coo, cell_N, img,params):
 
     return graph_dict,data1,x_feature
 def graph_construction(adj_coo, cell_N, params):
+"""
+Constructs a standard graph from spatial data, suitable for network analysis tasks. 
+This function is the backbone for building basic graph structures in spatial data analysis.
+"""
     adata_Adj = graph_computing(adj_coo, cell_N, params)
     graphdict = edgeList2edgeDict(adata_Adj, cell_N)
     adj_org = nx.adjacency_matrix(nx.from_dict_of_lists(graphdict))
@@ -538,6 +613,10 @@ def graph_construction(adj_coo, cell_N, params):
 
     return graph_dict
 def TransformerST_graph_construction_histology(adj_coo, cell_N, img,histology,params):
+"""
+Specialized for TransformerST models, it integrates histological data into the graph construction process. 
+This function is essential for biomedical applications where histological context adds significant value to the analysis.
+"""
     adata_Adj = graph_computing_adaptive_histology(adj_coo, cell_N, img,histology,params)
     graphdict = edgeList2edgeDict(adata_Adj, cell_N)
     adj_org = nx.adjacency_matrix(nx.from_dict_of_lists(graphdict))
@@ -567,6 +646,9 @@ def TransformerST_graph_construction_histology(adj_coo, cell_N, img,histology,pa
 
     return graph_dict,data1
 def combine_graph_dict(dict_1, dict_2):
+"""
+Merges multiple graph dictionaries into one, enabling the combination of graphs from different sources or datasets. 
+"""
     # TODO add adj_org
     tmp_adj_norm = torch.block_diag(dict_1['adj_norm'].to_dense(), dict_2['adj_norm'].to_dense())
     graph_dict = {
