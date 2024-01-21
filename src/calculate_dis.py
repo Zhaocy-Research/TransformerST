@@ -7,10 +7,16 @@ import matplotlib.colors as clr
 import matplotlib.pyplot as plt
 
 def distance(t1,t2):
+	"""
+ 	Calculates the Euclidean distance between two points in a multidimensional space.
+  	"""
 	sum=((t1-t2)**2).sum()
 	return math.sqrt(sum)
 
 def calculate_dis_matrix(x, y, x_pixel=None, y_pixel=None, image=None, beta=49, alpha=1, histology=True):
+	"""
+ 	Computes a distance matrix between points in spatial transcriptomics data. 
+  	"""
 	#x,y,x_pixel, y_pixel are lists
 	dis=np.zeros((len(x),len(x)))
 	if histology:
@@ -61,6 +67,10 @@ def calculate_dis_matrix(x, y, x_pixel=None, y_pixel=None, image=None, beta=49, 
 		return dis
 
 def extract_color(x_pixel=None, y_pixel=None, image=None, beta=49, RGB=True):
+	"""
+ 	Extracts color information from histological images at specified pixel coordinates. 
+  	This function is used to derive color-based features from histological images
+  	"""
 	if RGB:
 		#beta to control the range of neighbourhood when calculate grey vale for one spot
 		beta_half=round(beta/2)
@@ -90,6 +100,9 @@ def extract_color(x_pixel=None, y_pixel=None, image=None, beta=49, RGB=True):
 		c3=np.array(g)
 	return c3
 def extract_color1(x_pixel=None, y_pixel=None, image=None, beta=49, RGB=True):
+	"""
+ 	Similar to extract_color, it's designed to extract color information from images 
+  	"""
 	if RGB:
 		#beta to control the range of neighbourhood when calculate grey vale for one spot
 		beta_half=round(beta/2)
