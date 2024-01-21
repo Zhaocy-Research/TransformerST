@@ -11,6 +11,7 @@ def pair(t):
     return t if isinstance(t, tuple) else (t, t)
 
 class PreNorm(nn.Module):
+    """This module applies layer normalization (LayerNorm) to the input before passing it to a function (fn)"""
     def __init__(self, dim, fn):
         super().__init__()
         self.norm = nn.LayerNorm(dim)
@@ -19,6 +20,9 @@ class PreNorm(nn.Module):
         return self.fn(self.norm(x), **kwargs)
 
 class FeedForward(nn.Module):
+    """
+    A feedforward neural network module that consists of a linear layer, a GELU activation function, and dropout layers.
+    """
     def __init__(self, dim, hidden_dim, dropout = 0.):
         super().__init__()
         self.net = nn.Sequential(
@@ -32,6 +36,9 @@ class FeedForward(nn.Module):
         return self.net(x)
 
 class Attention(nn.Module):
+    """
+    Implements the multi-head self-attention mechanism, a key component of transformer models. 
+    """
     def __init__(self, dim, heads = 8, dim_head = 64, dropout = 0.):
         super().__init__()
         inner_dim = dim_head *  heads
@@ -64,6 +71,10 @@ class Attention(nn.Module):
         return self.to_out(out)
 
 class Transformer(nn.Module):
+    """
+    A sequence of alternating layers of multi-head self-attention (using the Attention class) and feedforward networks (using the FeedForward class), 
+    each preceded by pre-normalization (using the PreNorm class). 
+    """
     def __init__(self, dim, depth, heads, dim_head, mlp_dim, dropout = 0.):
         super().__init__()
         self.layers = nn.ModuleList([])
@@ -79,6 +90,10 @@ class Transformer(nn.Module):
         return x
 
 class ViT(nn.Module):
+    """
+    This is the main Vision Transformer model class. 
+    It initializes a transformer with specified dimensions, depth, number of heads, and other parameters. 
+    """
     def __init__(self, *, dim, depth, heads, mlp_dim, dim_head = 64, dropout = 0., emb_dropout = 0.):
         super().__init__()
         self.dropout = nn.Dropout(emb_dropout)
