@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import cv2
-
 def scan_contour(spots, scan_x=True, shape="hexagon"):
 	"""
  	This function scans a set of spatial transcriptomic spots to create a contour boundary based on their spatial distribution. 
