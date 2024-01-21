@@ -19,7 +19,6 @@ from .model_utils import (
 
 _logger = logging.getLogger(__name__)
 
-
 class scVI(BaseCellModel):
 """
 The scVI class is a deep learning framework tailored for single-cell RNA sequencing data analysis. 
