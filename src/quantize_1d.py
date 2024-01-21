@@ -3,7 +3,9 @@ import torch.nn as nn
 
 
 class VectorQuantizer(nn.Module):
-    ""
+    """
+    it discretizes the continuous output of an encoder into a discrete form by mapping it to the closest embedding in a learnable codebook, and it computes a loss that includes a commitment cost to maintain the fidelity of this quantization process. 
+    This module is essential for effectively compressing and reconstructing input data in models that rely on vector quantization techniques.
     ____________________________________________
     Discretization bottleneck.
     Inputs:
