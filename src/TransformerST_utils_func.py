@@ -14,6 +14,10 @@ def mk_dir(input_path):
 
 
 def prefilter_cells(adata, min_counts=None, max_counts=None, min_genes=200, max_genes=None):
+    """
+    Filters cells from an AnnData object based on criteria such as minimum and maximum counts and genes, 
+    a crucial step in cleaning and standardizing single-cell data.
+    """
     if min_genes is None and min_counts is None and max_genes is None and max_counts is None:
         raise ValueError('Provide one of min_counts, min_genes, max_counts or max_genes.')
     id_tmp = np.asarray([True] * adata.shape[0], dtype=bool)
@@ -31,6 +35,9 @@ def prefilter_cells(adata, min_counts=None, max_counts=None, min_genes=200, max_
 
 
 def prefilter_genes(adata, min_counts=None, max_counts=None, min_cells=10, max_cells=None):
+    """
+    Filters genes based on their presence in a minimum number of cells or their expression count, aiding in reducing noise and focusing on relevant genetic information.
+    """
     if min_cells is None and min_counts is None and max_cells is None and max_counts is None:
         raise ValueError('Provide one of min_counts, min_genes, max_counts or max_genes.')
     id_tmp = np.asarray([True] * adata.shape[1], dtype=bool)
@@ -44,11 +51,18 @@ def prefilter_genes(adata, min_counts=None, max_counts=None, min_cells=10, max_c
                             sc.pp.filter_genes(adata.X, max_counts=max_counts)[0]) if max_counts is not None else id_tmp
     adata._inplace_subset_var(id_tmp)
 def prefilter_specialgenes(adata,Gene1Pattern="ERCC",Gene2Pattern="MT-"):
+    """
+    Excludes specific genes (like ERCC spike-ins or mitochondrial genes) that can skew analysis, ensuring more accurate biological interpretation.
+    """
     id_tmp1=np.asarray([not str(name).startswith(Gene1Pattern) for name in adata.var_names],dtype=bool)
     id_tmp2=np.asarray([not str(name).startswith(Gene2Pattern) for name in adata.var_names],dtype=bool)
     id_tmp=np.logical_and(id_tmp1,id_tmp2)
     adata._inplace_subset_var(id_tmp)
 def adata_preprocess(i_adata, min_cells=3, pca_n_comps=300):
+    """
+     Filters genes and cells based on minimum counts, normalizes total counts per cell, identifies highly variable genes, and applies log transformation. 
+
+    """
     print('===== Preprocessing Data ')
     # print(i_adata)
     # prefilter_genes(i_adata, min_cells=3)  # avoiding all genes are zeros
@@ -91,6 +105,10 @@ def adata_preprocess(i_adata, min_cells=3, pca_n_comps=300):
     # return i_adata.obsm['X_pca']
     return i_adata
 def adata_preprocess1(i_adata, min_cells=3, pca_n_comps=300):
+    """
+     Similar to adata_preprocess, this function filters genes, normalizes, scales, and applies PCA. 
+     However, it does not explicitly focus on identifying highly variable genes
+    """
     print('===== Preprocessing Data ')
     sc.pp.filter_genes(i_adata, min_cells=min_cells)
     sc.pp.normalize_total(i_adata, target_sum=1, exclude_highly_expressed=True, inplace=False)
@@ -102,6 +120,10 @@ def adata_preprocess1(i_adata, min_cells=3, pca_n_comps=300):
     return i_adata
 
 def adata_preprocess_bc(i_adata, min_cells=3, pca_n_comps=300):
+    """
+     ocuses on normalizing the total counts per cell and scaling the data. 
+     Unlike the other two functions, it does not apply PCA or filter genes based on their variability,
+    """
     print('===== Preprocessing Data ')
     # print(i_adata)
     # prefilter_genes(i_adata, min_cells=3)  # avoiding all genes are zeros
@@ -145,6 +167,9 @@ def adata_preprocess_bc(i_adata, min_cells=3, pca_n_comps=300):
     # return i_adata.obsm['X_pca']
     return i_adata
 def load_ST_file(file_fold, count_file='filtered_feature_bc_matrix.h5', load_images=True, file_Adj=None):
+    """
+    load spatial transcriptomics data including optional image data.
+    """
     adata_h5 = sc.read_visium(file_fold, load_images=load_images, count_file=count_file)
     adata_h5.var_names_make_unique()
     # print(adata_h5)
@@ -170,6 +195,9 @@ def load_ST_file(file_fold, count_file='filtered_feature_bc_matrix.h5', load_ima
     print('adata: (' + str(adata_h5.shape[0]) + ', ' + str(adata_h5.shape[1]) + ')')
     return adata_h5
 def load_ST_file_histology(file_fold, count_file='filtered_feature_bc_matrix.h5', load_images=False,file_Adj=None):
+    """
+    Specifically tailored for loading histology-related spatial transcriptomics data
+    """
     adata_h5 = sc.read_visium(file_fold, load_images=load_images, count_file=count_file)
     adata_h5.var_names_make_unique()
     # print(adata_h5)
@@ -195,6 +223,9 @@ def load_ST_file_histology(file_fold, count_file='filtered_feature_bc_matrix.h5'
     print('adata: (' + str(adata_h5.shape[0]) + ', ' + str(adata_h5.shape[1]) + ')')
     return adata_h5
 def load_ST_file1(file_fold, count_file='filtered_feature_bc_matrix.h5', load_images=True, file_Adj=None):
+    """
+    load spatial transcriptomics data including optional image data.
+    """
     adata_h5 = sc.read_visium(file_fold, load_images=load_images, count_file=count_file)
     adata_h5.var_names_make_unique()
     # print(adata_h5)
@@ -220,6 +251,9 @@ def load_ST_file1(file_fold, count_file='filtered_feature_bc_matrix.h5', load_im
     print('adata: (' + str(adata_h5.shape[0]) + ', ' + str(adata_h5.shape[1]) + ')')
     return adata_h5
 def load_ST_file_gai(file_fold, count_file='filtered_feature_bc_matrix.h5', load_images=True, file_Adj=None):
+    """
+    load spatial transcriptomics data
+    """
     adata_h5 = sc.read_visium(file_fold, load_images=load_images, count_file=count_file)
     adata_h5.var_names_make_unique()
     # print(adata_h5)
@@ -251,6 +285,9 @@ def _download_visium_dataset(
     spaceranger_version: str,
     base_dir='./data/',
 ):
+    """
+    Downloads and extracts spatial transcriptomics datasets from the 10x Genomics platform, facilitating easy access to public datasets.
+    """
     import tarfile
 
     url_prefix = f'https://cf.10xgenomics.com/samples/spatial-exp/{spaceranger_version}/{sample_id}/'
@@ -274,6 +311,10 @@ def _download_visium_dataset(
 
 
 def load_visium_sge(sample_id='V1_Breast_Cancer_Block_A_Section_1', save_path='./data/'):
+    """
+    A higher-level function that downloads and loads a specific Visium spatial gene expression dataset, 
+    providing a streamlined way to access and begin analyzing these complex datasets.
+    """
     if "V1_" in sample_id:
         spaceranger_version = "1.1.0"
     else:
