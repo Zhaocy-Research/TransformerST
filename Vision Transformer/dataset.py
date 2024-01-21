@@ -29,7 +29,9 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 Image.MAX_IMAGE_PIXELS = None
 
 class LUNG(torch.utils.data.Dataset):
-
+    """
+    The LUNG class in this file is designed as a custom dataset for handling spatial transcriptomics data, specifically tailored for lung tissue analysis. 
+    """
     def __init__(self, train=True, gene_list=None, ds=None, sr=False, fold=0):
         super(LUNG, self).__init__()
         self.r = 256 // 4
