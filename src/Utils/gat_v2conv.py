@@ -12,7 +12,6 @@ from torch_geometric.utils import remove_self_loops, add_self_loops, softmax
 
 from torch_geometric.nn.inits import glorot, zeros
 
-
 class GATv2Conv(MessagePassing):
     r"""The GATv2 operator from the `"How Attentive are Graph Attention Networks?"
     <https://arxiv.org/abs/2105.14491>`_ paper, which fixes the static
