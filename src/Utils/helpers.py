@@ -5,7 +5,6 @@ import torch
 from torch.distributions.uniform import Uniform
 from torch.distributions.normal import Normal
 import torch.nn.functional as F
-
 def ELBO_collapsed_Categorical(logits_phi, alpha, K, N):
     """
     This function calculates the Evidence Lower Bound (ELBO) for a collapsed categorical distribution
