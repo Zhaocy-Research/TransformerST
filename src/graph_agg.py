@@ -17,6 +17,9 @@ from anndata import AnnData
 # from config import cfg
 
 def euclidean_distance(x,y):
+    """
+    Calculates the pairwise Euclidean distance between two sets of vectors. It is used as a distance metric for comparing feature embeddings
+    """
     out = -2*torch.matmul(x, y)
     out += (x**2).sum(dim=-1, keepdim=True)
     out += (y**2).sum(dim=-2, keepdim=True)
@@ -65,6 +68,7 @@ def compute_distances(xe, ye, train=True):
 
 def hard_knn(D, k):
     r"""
+    Performs a k-nearest neighbors search, returning the indices and scores of the top k nearest neighbors in a dataset.
     input D: b m n
     output Idx: b m k
     """
@@ -76,7 +80,7 @@ def hard_knn(D, k):
 
 class GraphConstruct(nn.Module):
     r"""
-    Graph Construction
+    Graph Construction,These classes create a graph structure from input data.
     """
     def __init__(self, scale, k, patchsize, stride, padding=None):
         r"""
@@ -200,7 +204,7 @@ class GraphConstruct(nn.Module):
 
 class GraphConstruct_spatial(nn.Module):
     r"""
-    Graph Construction
+    Graph Construction,These classes create a graph structure from input data with spatial transcriptomcis
     """
 
     def __init__(self, scale, k, patchsize, stride, padding=None):
@@ -357,7 +361,8 @@ class GraphConstruct_spatial(nn.Module):
 
 class GraphAggregation_spatial(nn.Module):
     r"""
-    Graph Aggregation
+    Graph Aggregation, These classes aggregate information across the constructed graphs in spatial transcriptomics. 
+    They play a crucial role in synthesizing and summarizing the information captured in the graph structure
     """
 
     def __init__(self, scale=2, k=1, patchsize=1, stride=1, padding=None):
@@ -448,7 +453,8 @@ class GraphAggregation_spatial(nn.Module):
         return z_sr
 class GraphAggregation(nn.Module):
     r"""
-    Graph Aggregation
+    Graph Aggregation,These classes aggregate information across the constructed graphs. 
+    They play a crucial role in synthesizing and summarizing the information captured in the graph structure
     """
     def __init__(self, scale, k, patchsize, stride, padding=None):
         r"""
@@ -849,7 +855,11 @@ class GraphAggregation_spatial_gai(nn.Module):
         return z_sr
 class GraphConstruct_TransformerST(nn.Module):
     r"""
-    Graph Construction
+    Graph Construction, specialized components of the TransformerST framework. 
+    This class is responsible for constructing a graph that encapsulates both spatial and feature information inherent in spatial transcriptomics data. 
+    It integrates spatial coordinates and gene expression data (or other molecular features) to 
+    create a graph where nodes represent spatial locations (like individual cells or defined spatial areas) 
+    and edges represent spatial relationships or similarities in feature space. 
     """
 
     def __init__(self, scale=2, k=1, patchsize=1, stride=1, padding=None):
@@ -1051,7 +1061,9 @@ class GraphConstruct_TransformerST(nn.Module):
 
 class GraphAggregation_TransformerST(nn.Module):
     r"""
-    Graph Aggregation
+    Graph Aggregation specialized components of the TransformerST framework. 
+    Once a graph is constructed, this class aggregates information across the graph. 
+    It synthesizes data from various nodes (representing spatial locations) to create a comprehensive representation of the spatial transcriptomics data. 
     """
 
     def __init__(self, scale=2, k=1, patchsize=1, stride=1, padding=None):
@@ -1120,7 +1132,7 @@ class GraphAggregation_TransformerST(nn.Module):
         # return z_sr
 class GraphAggregation_spatial_gai1(nn.Module):
     r"""
-    Graph Aggregation
+    Graph Aggregation, other variant of graph aggregation tailored for spatial data, 
     """
 
     def __init__(self, scale, k, patchsize, stride, padding=None):
