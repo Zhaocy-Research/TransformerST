@@ -5,7 +5,6 @@ import scanpy as sc
 import math
 import matplotlib.colors as clr
 import matplotlib.pyplot as plt
-
 def distance(t1,t2):
 	"""
  	Calculates the Euclidean distance between two points in a multidimensional space.
