@@ -21,7 +21,11 @@ _logger = logging.getLogger(__name__)
 
 
 class scVI(BaseCellModel):
-
+"""
+The scVI class is a deep learning framework tailored for single-cell RNA sequencing data analysis. 
+It employs a variational autoencoder architecture for encoding gene expression data into latent space and reconstructing it, effectively handling batch effects and variability in scRNA-seq data. 
+The class supports various network configurations and loss functions, making it adaptable for diverse genomic datasets and analysis needs.
+"""
     emb_names = ['z', 's']
     clustering_input = 'z'
     max_logsigma = 10
