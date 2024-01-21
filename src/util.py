@@ -7,6 +7,10 @@ from anndata import AnnData,read_csv,read_text,read_mtx
 from scipy.sparse import issparse
 
 def prefilter_cells(adata,min_counts=None,max_counts=None,min_genes=200,max_genes=None):
+"""
+Filters cells in an AnnData object (adata) based on user-defined minimum and maximum counts (min_counts, max_counts) and genes (min_genes, max_genes). 
+It's a preprocessing step to remove cells with too few or too many counts/genes, which can be indicative of low-quality or dying cells.
+"""
     if min_genes is None and min_counts is None and max_genes is None and max_counts is None:
         raise ValueError('Provide one of min_counts, min_genes, max_counts or max_genes.')
     id_tmp=np.asarray([True]*adata.shape[0],dtype=bool)
@@ -20,6 +24,10 @@ def prefilter_cells(adata,min_counts=None,max_counts=None,min_genes=200,max_gene
    
 
 def prefilter_genes(adata,min_counts=None,max_counts=None,min_cells=10,max_cells=None):
+"""
+Filters cells in an AnnData object (adata) based on user-defined minimum and maximum counts (min_counts, max_counts) and genes (min_genes, max_genes). 
+It's a preprocessing step to remove cells with too few or too many counts/genes, which can be indicative of low-quality or dying cells.
+"""
     if min_cells is None and min_counts is None and max_cells is None and max_counts is None:
         raise ValueError('Provide one of min_counts, min_genes, max_counts or max_genes.')
     id_tmp=np.asarray([True]*adata.shape[1],dtype=bool)
@@ -31,12 +39,20 @@ def prefilter_genes(adata,min_counts=None,max_counts=None,min_cells=10,max_cells
 
 
 def prefilter_specialgenes(adata,Gene1Pattern="ERCC",Gene2Pattern="MT-"):
+"""
+Filters out genes from adata that start with specific patterns (Gene1Pattern and Gene2Pattern, like "ERCC" or "MT-"). 
+It's used to remove genes that might represent technical artifacts or mitochondrial genes, often necessary for quality control in single-cell analyses.
+"""
     id_tmp1=np.asarray([not str(name).startswith(Gene1Pattern) for name in adata.var_names],dtype=bool)
     id_tmp2=np.asarray([not str(name).startswith(Gene2Pattern) for name in adata.var_names],dtype=bool)
     id_tmp=np.logical_and(id_tmp1,id_tmp2)
     adata._inplace_subset_var(id_tmp)
 
 def relative_func(expres):
+"""
+Computes a relative expression metric for a gene across different samples. 
+It normalizes the expression levels of a gene to fall between 0 and 1, based on its minimum and maximum expression across the samples.
+"""
     #expres: an array counts expression for a gene
     maxd = np.max(expres) - np.min(expres)
     min_exp=np.min(expres)
@@ -44,6 +60,11 @@ def relative_func(expres):
     return rexpr
 
 def plot_relative_exp(input_adata, gene, x_name, y_name,color,use_raw=False, spot_size=200000):
+"""
+Visualizes the relative expression of a specified gene across samples in adata. 
+It plots each sample based on specified metadata fields (x_name, y_name) and colors them by the relative expression of the gene. 
+Useful for spatial visualization of gene expression patterns.
+"""
     adata=input_adata.copy()
     if use_raw:
         X=adata.raw.X
@@ -61,6 +82,10 @@ def plot_relative_exp(input_adata, gene, x_name, y_name,color,use_raw=False, spo
     return fig
 
 def plot_log_exp(input_adata, gene, x_name, y_name,color,use_raw=False):
+"""
+Similar to plot_relative_exp, but visualizes the log-transformed expression of a gene. 
+It's particularly useful when dealing with highly skewed gene expression data, as log transformation can normalize these disparities.
+"""
     adata=input_adata.copy()
     if use_raw:
         X=adata.X
@@ -77,6 +102,11 @@ def plot_log_exp(input_adata, gene, x_name, y_name,color,use_raw=False):
     return fig
 
 def refine_clusters(pred, resize_height, resize_width, threshold, radius):
+"""
+Refines clustering results based on a pixel-based approach. It's designed for images or spatial data where each pixel is assigned to a cluster (pred). 
+Clusters with fewer pixels than a specified threshold are considered minor and can be merged into neighboring major clusters. 
+This function enhances the robustness and interpretability of spatial clustering results.
+"""
     pixel_num=pd.Series(pred).value_counts()
     clusters=pixel_num.index.tolist()
     reorder_map={}
