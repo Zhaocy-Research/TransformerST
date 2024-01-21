@@ -7,7 +7,6 @@ import  torch.nn.functional as F
 
 from .model_utils import get_fully_connected_layers
 from scETM.logging_utils import log_arguments
-
 class BatchClassifier(nn.Module):
     """
     BatchClassifier is a neural network module for classification tasks, built with PyTorch.
