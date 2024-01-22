@@ -1,3 +1,6 @@
-In our TransformerST analysis, we used 'DLPFC.ARI_boxplot.R' to generate Figure 2c, and 'DLPFC_comp.R' was employed to create Figure 2a and Figure 2b.
+To visualize Figure 2 in our manuscript, please use the 'Figure2.ipynb' notebook, which is based on the R language. Ensure R is enabled in your Jupyter notebook; if not, install the IRkernel package in R with these commands:
 
-The DLPFC_BayesSpace.R script is designed to execute BayesSpace analyses and compare its results with other methods. Meanwhile, the DLPFC_SpaGCN script is specifically used for running SpaGCN results.
+install.packages('IRkernel')
+IRkernel::installspec(user = FALSE)
+
+For your reference, we provide the original R code. The 'DLPFC.ARI_boxplot.R' script was used to generate Figure 2c, while 'DLPFC_comp.R' produced Figures 2a and 2b. Additionally, 'DLPFC_BayesSpace.R' is tailored for BayesSpace analyses and comparisons with other methods, and 'DLPFC_SpaGCN' is for running SpaGCN results."
