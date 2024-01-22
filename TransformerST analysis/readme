@@ -1,4 +1,4 @@
-To visualize Figure 2 in our manuscript, please use the **'Figure2.ipynb'** notebook, which is based on the R language. Ensure R is enabled in your Jupyter notebook; if not, install the IRkernel package in R with these commands:
+To visualize Figure 2 in our manuscript, please use the __'Figure2.ipynb'__ notebook, which is based on the R language. Ensure R is enabled in your Jupyter notebook; if not, install the IRkernel package in R with these commands:
 
 install.packages('IRkernel')
 IRkernel::installspec(user = FALSE)
