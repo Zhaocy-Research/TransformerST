@@ -14,6 +14,7 @@ The code is licensed under the MIT license.
 To visualize Figure 2 in our manuscript, please use the **'Figure2.ipynb'** notebook, which is based on the R language. Ensure R is enabled in your Jupyter notebook; if not, install the IRkernel package in R with these commands:
 
 install.packages('IRkernel')
+
 IRkernel::installspec(user = FALSE)
 
 To run the notebook, simply adjust the following paths: base_result_path for the TransformerST output, base_data_path for spatial transcriptomics data, and base_output_path to visualize the ARI for all 12 samples.
