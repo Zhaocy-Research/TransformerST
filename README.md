@@ -10,7 +10,8 @@ Framework
 The code is licensed under the MIT license.
 
 **The notebook to reproduce our result is in https://github.com/Zhaocy-Research/TransformerST/blob/main/TransformerST%20analysis/Figure%202.ipynb**
-**To visualize Figure 2 in our manuscript, please use the **'Figure2.ipynb'** notebook, which is based on the R language. Ensure R is enabled in your Jupyter notebook; if not, install the IRkernel package in R with these commands:
+
+To visualize Figure 2 in our manuscript, please use the **'Figure2.ipynb'** notebook, which is based on the R language. Ensure R is enabled in your Jupyter notebook; if not, install the IRkernel package in R with these commands:
 
 install.packages('IRkernel')
 IRkernel::installspec(user = FALSE)
@@ -18,7 +19,7 @@ IRkernel::installspec(user = FALSE)
 To run the notebook, simply adjust the following paths: base_result_path for the TransformerST output, base_data_path for spatial transcriptomics data, and base_output_path to visualize the ARI for all 12 samples.
 
 The data and results are accessible through the following link:
-https://drive.google.com/drive/u/0/folders/1w78k4P6eqaedRkUmac_GdjiU7tavW5P4**
+https://drive.google.com/drive/u/0/folders/1w78k4P6eqaedRkUmac_GdjiU7tavW5P4
 
 **1. Requirements**
 
