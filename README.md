@@ -9,6 +9,8 @@ Framework
 
 The code is licensed under the MIT license.
 
+**The notebook to reproduce our result is in https://github.com/Zhaocy-Research/TransformerST/blob/main/TransformerST%20analysis/Figure%202.ipynb**
+
 **1. Requirements**
 
 **1.1 Operating systems:**
