@@ -6,6 +6,6 @@ IRkernel::installspec(user = FALSE)
 To run the notebook, simply adjust the following paths: base_result_path for the TransformerST output, base_data_path for spatial transcriptomics data, and base_output_path to visualize the ARI for all 12 samples.
 
 The data and results are accessible through the following link:
-https://drive.google.com/drive/u/0/folders/1w78k4P6eqaedRkUmac_GdjiU7tavW5P4
+https://drive.google.com/drive/folders/1g3g3OPXgP6cQgD5M27iGPFh85h9UZ1rg?usp=sharing
 
 For your reference, we provide the original R code. The 'DLPFC.ARI_boxplot.R' script was used to generate Figure 2c, while 'DLPFC_comp.R' produced Figures 2a and 2b. Additionally, 'DLPFC_BayesSpace.R' is tailored for BayesSpace analyses and comparisons with other methods, and 'DLPFC_SpaGCN' is for running SpaGCN results."
