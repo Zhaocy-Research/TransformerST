@@ -19,7 +19,7 @@ from torch.distributions import Normal, Independent
 from src.decoder import BasisODEDecoder,BasisDecoder
 from torch.nn.functional import softplus
 from src.submodules import *
-from src.quantize_1d import VectorQuantizer
+from src.Utils.quantize_1d import VectorQuantizer
 import torch_geometric as pyg
 # from scETM.logging_utils import log_arguments
 # from src.BaseCellModel import BaseCellModel
