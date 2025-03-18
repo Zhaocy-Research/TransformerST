@@ -14,27 +14,27 @@ from sklearn.mixture import GaussianMixture
 from src.TransformerST_graph_func import TransformerST_graph_construction1 as graph_construction
 import torch.optim as optim
 def target_distribution(batch):
-"""
-This function recalculates the soft cluster assignments to emphasize data points with higher confidence in their cluster assignment, 
-aiding in cluster refinement during training.
-"""
+    """
+    This function recalculates the soft cluster assignments to emphasize data points with higher confidence in their cluster assignment, 
+    aiding in cluster refinement during training.
+    """
     weight = (batch ** 2) / torch.sum(batch, 0)
     return (weight.t() / torch.sum(weight, 1)).t()
 
 
 def reconstruction_loss(decoded, x):
-"""
-Computes the Mean Squared Error (MSE) loss between the decoded (reconstructed) output and the original input data, 
-crucial for training autoencoder-like models.
-"""
+    """
+    Computes the Mean Squared Error (MSE) loss between the decoded (reconstructed) output and the original input data, 
+    crucial for training autoencoder-like models.
+    """
     loss_func = torch.nn.MSELoss()
     loss_rcn = loss_func(decoded, x)
     return loss_rcn
 
 def min_max_normalization(tensor,min_value,max_value):
-"""
-Normalizes a tensor to a specific range (between min_value and max_value), ensuring consistent scale across different features or datasets.
-"""
+    """
+    Normalizes a tensor to a specific range (between min_value and max_value), ensuring consistent scale across different features or datasets.
+    """
     min_tensor=tensor.min()
     tensor=(tensor-min_tensor)
     max_tensor=tensor.max()
@@ -42,10 +42,10 @@ Normalizes a tensor to a specific range (between min_value and max_value), ensur
     tensor=tensor*(max_value-min_value)+min_value
     return tensor
 def gcn_loss(preds, labels, mu, logvar, n_nodes, norm, mask=None):
-"""
-Calculates the graph convolutional network loss, combining binary cross-entropy for graph reconstruction with a Kullback-Leibler divergence term for regularization, 
-balancing graph structure learning with latent space organization.
-"""
+    """
+    Calculates the graph convolutional network loss, combining binary cross-entropy for graph reconstruction with a Kullback-Leibler divergence term for regularization, 
+    balancing graph structure learning with latent space organization.
+    """
     if mask is not None:
         preds = preds * mask
         labels = labels * mask
@@ -61,10 +61,10 @@ balancing graph structure learning with latent space organization.
     # print(cost,KLD,"wwwww")
     return cost + KLD
 def gcn_loss_attention(preds, labels, norm, mask=None):
-"""
-Similar to gcn_loss, but tailored for models using attention mechanisms, 
-focusing solely on the binary cross-entropy part for graph reconstruction.
-"""
+    """
+    Similar to gcn_loss, but tailored for models using attention mechanisms, 
+    focusing solely on the binary cross-entropy part for graph reconstruction.
+    """
     if mask is not None:
         preds = preds
         labels = labels
