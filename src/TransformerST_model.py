@@ -6,7 +6,7 @@ from torch.nn.parameter import Parameter
 from torch.nn.modules.module import Module
 from torch_geometric.nn import GraphConv, graclus, max_pool, global_mean_pool, JumpingKnowledge
 import torch_geometric as tg
-from src.gat_v2conv import GATv2Conv
+#from src.gat_v2conv import GATv2Conv
 from src.model_utils import InputPartlyTrainableLinear, PartlyTrainableParameter2D, get_fully_connected_layers, get_kl
 import anndata
 from typing import Any, Iterable, Mapping, Sequence, Tuple, Union
