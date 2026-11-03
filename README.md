@@ -19,8 +19,7 @@ IRkernel::installspec(user = FALSE)
 
 To run the notebook, simply adjust the following paths: base_result_path for the TransformerST output, base_data_path for spatial transcriptomics data, and base_output_path to visualize the ARI for all 12 samples.
 
-The data and results are accessible through the following link:
-https://drive.google.com/drive/u/0/folders/1w78k4P6eqaedRkUmac_GdjiU7tavW5P4
+
 
 **1. Requirements**
 
@@ -61,8 +60,7 @@ Before running the demo below, initiate the process by executing the Vision Tran
 
 Raw data should be placed in the folder data.
 
-we take the mouse lung data for example, which is in data/Lung/A1. Please use the link to get the mouse lung data
-https://drive.google.com/drive/folders/1anVCPRrPIB2jV6DTn6UGJL5X0pErdUqg?usp=share_link
+
 
 
 **2.2 Cell type identification at spot resolution with Mouse Lung data**
